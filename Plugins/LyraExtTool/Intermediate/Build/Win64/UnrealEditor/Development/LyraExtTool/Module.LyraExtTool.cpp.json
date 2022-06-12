@@ -1,0 +1,18 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "d:\\unreal\\lyrastartergamebased\\plugins\\lyraexttool\\intermediate\\build\\win64\\unrealeditor\\development\\lyraexttool\\module.lyraexttool.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\unreal\\lyrastartergamebased\\intermediate\\build\\win64\\lyraeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "d:\\unreal\\lyrastartergamebased\\plugins\\lyraexttool\\intermediate\\build\\win64\\unrealeditor\\development\\lyraexttool\\definitions.lyraexttool.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\lyraexttool\\source\\lyraexttool\\private\\bpfunctionlibrary.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\lyraexttool\\source\\lyraexttool\\public\\bpfunctionlibrary.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\lyraexttool\\intermediate\\build\\win64\\unrealeditor\\inc\\lyraexttool\\bpfunctionlibrary.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\lyraexttool\\source\\lyraexttool\\private\\lyraexttool.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\lyraexttool\\source\\lyraexttool\\public\\lyraexttool.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

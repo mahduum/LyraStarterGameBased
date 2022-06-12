@@ -1,0 +1,19 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.GameSubtitles.cpp.obj": [
+			"GameSubtitlesModule.cpp.obj",
+			"MediaSubtitlesPlayer.cpp.obj",
+			"SubtitleDisplaySubsystem.cpp.obj",
+			"SSubtitleDisplay.cpp.obj",
+			"SubtitleDisplay.cpp.obj"
+		],
+		"Module.GameSubtitles.gen.cpp.obj": [
+			"GameSubtitles.init.gen.cpp.obj",
+			"MediaSubtitlesPlayer.gen.cpp.obj",
+			"SubtitleDisplay.gen.cpp.obj",
+			"SubtitleDisplayOptions.gen.cpp.obj",
+			"SubtitleDisplaySubsystem.gen.cpp.obj"
+		]
+	}
+}

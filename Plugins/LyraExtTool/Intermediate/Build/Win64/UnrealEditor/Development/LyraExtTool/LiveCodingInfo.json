@@ -1,0 +1,13 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.LyraExtTool.cpp.obj": [
+			"BPFunctionLibrary.cpp.obj",
+			"LyraExtTool.cpp.obj"
+		],
+		"Module.LyraExtTool.gen.cpp.obj": [
+			"BPFunctionLibrary.gen.cpp.obj",
+			"LyraExtTool.init.gen.cpp.obj"
+		]
+	}
+}

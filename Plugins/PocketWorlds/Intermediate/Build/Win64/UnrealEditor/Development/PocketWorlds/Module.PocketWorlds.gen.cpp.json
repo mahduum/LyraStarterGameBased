@@ -1,0 +1,29 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\development\\pocketworlds\\module.pocketworlds.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\unreal\\lyrastartergamebased\\intermediate\\build\\win64\\lyraeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\development\\pocketworlds\\definitions.pocketworlds.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketcapture.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\source\\public\\pocketcapture.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketcapture.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\source\\public\\pocketcapturesubsystem.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketcapturesubsystem.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketcapturesubsystem.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketlevel.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\source\\public\\pocketlevel.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketlevel.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketlevelinstance.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\source\\public\\pocketlevelinstance.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketlevelinstance.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\source\\public\\pocketlevelsystem.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketlevelsystem.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketlevelsystem.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\pocketworlds\\intermediate\\build\\win64\\unrealeditor\\inc\\pocketworlds\\pocketworlds.init.gen.cpp"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

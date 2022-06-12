@@ -1,0 +1,21 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.PocketWorlds.cpp.obj": [
+			"PocketCapture.cpp.obj",
+			"PocketCaptureSubsystem.cpp.obj",
+			"PocketLevel.cpp.obj",
+			"PocketLevelInstance.cpp.obj",
+			"PocketLevelSystem.cpp.obj",
+			"PocketWorldsModule.cpp.obj"
+		],
+		"Module.PocketWorlds.gen.cpp.obj": [
+			"PocketCapture.gen.cpp.obj",
+			"PocketCaptureSubsystem.gen.cpp.obj",
+			"PocketLevel.gen.cpp.obj",
+			"PocketLevelInstance.gen.cpp.obj",
+			"PocketLevelSystem.gen.cpp.obj",
+			"PocketWorlds.init.gen.cpp.obj"
+		]
+	}
+}

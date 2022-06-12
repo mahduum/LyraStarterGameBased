@@ -1,0 +1,38 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\development\\gamesubtitles\\module.gamesubtitles.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\unreal\\lyrastartergamebased\\intermediate\\build\\win64\\lyraeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\development\\gamesubtitles\\definitions.gamesubtitles.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\gamesubtitles.init.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\mediasubtitlesplayer.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\source\\public\\players\\mediasubtitlesplayer.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\media\\public\\imediaplayer.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\mediasubtitlesplayer.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\subtitledisplay.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\source\\public\\widgets\\subtitledisplay.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\umg\\public\\components\\widget.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\umg\\public\\components\\visual.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\umg\\visual.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\umg\\public\\components\\slatewrappertypes.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\umg\\slatewrappertypes.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\umg\\public\\slate\\widgettransform.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\umg\\widgettransform.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\umg\\public\\blueprint\\widgetnavigation.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\source\\runtime\\slatecore\\public\\types\\navigationmetadata.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\umg\\widgetnavigation.generated.h",
+            "c:\\program files\\epic games\\ue_5.0\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\umg\\widget.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\source\\public\\subtitledisplaysubsystem.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\source\\public\\subtitledisplayoptions.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\subtitledisplayoptions.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\subtitledisplaysubsystem.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\subtitledisplay.generated.h",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\subtitledisplayoptions.gen.cpp",
+            "d:\\unreal\\lyrastartergamebased\\plugins\\gamesubtitles\\intermediate\\build\\win64\\unrealeditor\\inc\\gamesubtitles\\subtitledisplaysubsystem.gen.cpp"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
