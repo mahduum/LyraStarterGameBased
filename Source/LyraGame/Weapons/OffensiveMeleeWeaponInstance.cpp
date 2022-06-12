@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Weapons/LyraOffensiveMeleeWeaponInstance.h"
+#include "Weapons/OffensiveMeleeWeaponInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Physics/PhysicalMaterialWithTags.h"
 
-ULyraOffensiveMeleeWeaponInstance::ULyraOffensiveMeleeWeaponInstance(const FObjectInitializer& ObjectInitializer)
+UOffensiveMeleeWeaponInstance::UOffensiveMeleeWeaponInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	ConsecutiveHitCountToDamagePerHitMultiplierCurve.EditorCurveData.AddKey(0.0f, 1.0f);
 }
 
-void ULyraOffensiveMeleeWeaponInstance::PostLoad()
+void UOffensiveMeleeWeaponInstance::PostLoad()
 {
 	Super::PostLoad();
 
@@ -21,13 +21,13 @@ void ULyraOffensiveMeleeWeaponInstance::PostLoad()
 }
 
 #if WITH_EDITOR
-void ULyraOffensiveMeleeWeaponInstance::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
+void UOffensiveMeleeWeaponInstance::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	UpdateDebugVisualization();
 }
 
-void ULyraOffensiveMeleeWeaponInstance::UpdateDebugVisualization()
+void UOffensiveMeleeWeaponInstance::UpdateDebugVisualization()
 {
 	// ComputeHeatRange(/*out*/ Debug_MinHeat, /*out*/ Debug_MaxHeat);
 	// ComputeSpreadRange(/*out*/ Debug_MinSpreadAngle, /*out*/ Debug_MaxSpreadAngle);
@@ -37,30 +37,30 @@ void ULyraOffensiveMeleeWeaponInstance::UpdateDebugVisualization()
 }
 #endif
 
-void ULyraOffensiveMeleeWeaponInstance::Tick(float DeltaSeconds)
+void UOffensiveMeleeWeaponInstance::Tick(float DeltaSeconds)
 {
 	UpdateMultipliers(DeltaSeconds);
 }
 
-void ULyraOffensiveMeleeWeaponInstance::OnEquipped()
+void UOffensiveMeleeWeaponInstance::OnEquipped()
 {
 	Super::OnEquipped();
 	//set or reset spread angles and damages per attack types (there should be a data asset for all of it?
 }
 
-void ULyraOffensiveMeleeWeaponInstance::OnUnequipped()
+void UOffensiveMeleeWeaponInstance::OnUnequipped()
 {
 	Super::OnUnequipped();
 }
 
-float ULyraOffensiveMeleeWeaponInstance::GetDistanceAttenuation(float Distance, const FGameplayTagContainer* SourceTags,
+float UOffensiveMeleeWeaponInstance::GetDistanceAttenuation(float Distance, const FGameplayTagContainer* SourceTags,
                                                        const FGameplayTagContainer* TargetTags) const
 {
 	const FRichCurve* Curve = DistanceDamageFalloff.GetRichCurveConst();
 	return Curve->HasAnyData() ? Curve->Eval(Distance) : 1.0f;
 }
 
-float ULyraOffensiveMeleeWeaponInstance::GetPhysicalMaterialAttenuation(const UPhysicalMaterial* PhysicalMaterial,
+float UOffensiveMeleeWeaponInstance::GetPhysicalMaterialAttenuation(const UPhysicalMaterial* PhysicalMaterial,
 	const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags) const
 {
 	float CombinedMultiplier = 1.0f;
@@ -78,12 +78,12 @@ float ULyraOffensiveMeleeWeaponInstance::GetPhysicalMaterialAttenuation(const UP
 	return CombinedMultiplier;//used in LyraDamageExecution
 }
 
-bool ULyraOffensiveMeleeWeaponInstance::UpdateSpread(float DeltaSeconds)
+bool UOffensiveMeleeWeaponInstance::UpdateSpread(float DeltaSeconds)
 {
 	return false;
 }
 
-bool ULyraOffensiveMeleeWeaponInstance::UpdateMultipliers(float DeltaSeconds)
+bool UOffensiveMeleeWeaponInstance::UpdateMultipliers(float DeltaSeconds)
 {
 	const float MultiplierNearlyEqualThreshold = 0.05f;
 

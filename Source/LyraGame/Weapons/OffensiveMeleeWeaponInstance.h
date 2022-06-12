@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystem/LyraAbilitySourceInterface.h"
 #include "Weapons/LyraWeaponInstance.h"
-#include "LyraOffensiveMeleeWeaponInstance.generated.h"
+#include "OffensiveMeleeWeaponInstance.generated.h"
 
 UENUM(BlueprintType)
 enum class EMeleeAttackType : uint8
@@ -20,10 +20,10 @@ enum class EMeleeAttackType : uint8
  * 
  */
 UCLASS()
-class LYRAGAME_API ULyraOffensiveMeleeWeaponInstance : public ULyraWeaponInstance, public ILyraAbilitySourceInterface//todo create different defensive weapon, some may accumulate energy, some may deflect shots
+class LYRAGAME_API UOffensiveMeleeWeaponInstance : public ULyraWeaponInstance, public ILyraAbilitySourceInterface//todo create different defensive weapon, some may accumulate energy, some may deflect shots
 {
 public:
-	ULyraOffensiveMeleeWeaponInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	UOffensiveMeleeWeaponInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void PostLoad() override;
 
