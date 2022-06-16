@@ -86,6 +86,8 @@ ULyraRangedWeaponInstance* ULyraGameplayAbility_RangedWeapon::GetWeaponInstance(
 
 bool ULyraGameplayAbility_RangedWeapon::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
+	UE_LOG(LogLyra, Display, TEXT("Can activate ranged weapon ability?"));
+
 	bool bResult = Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 
 	if (bResult)
@@ -378,7 +380,9 @@ void ULyraGameplayAbility_RangedWeapon::PerformLocalTargeting(OUT TArray<FHitRes
 		}
 #endif
 
+		UE_LOG(LogLyraAbilitySystem, Display, TEXT("Performing local targetting with ranged weapon..."));
 		TraceBulletsInCartridge(InputData, /*out*/ OutHits);
+		UE_LOG(LogLyraAbilitySystem, Display, TEXT("Out hits count: %d"), OutHits.Num());
 	}
 }
 
@@ -389,6 +393,8 @@ void ULyraGameplayAbility_RangedWeapon::TraceBulletsInCartridge(const FRangedWea
 
 	const int32 BulletsPerCartridge = WeaponData->GetBulletsPerCartridge();
 
+	UE_LOG(LogLyraAbilitySystem, Display, TEXT("Bullets per cartridge: %d"), BulletsPerCartridge);
+	
 	for (int32 BulletIndex = 0; BulletIndex < BulletsPerCartridge; ++BulletIndex)
 	{
 		const float BaseSpreadAngle = WeaponData->GetCalculatedSpreadAngle();
@@ -442,6 +448,8 @@ void ULyraGameplayAbility_RangedWeapon::TraceBulletsInCartridge(const FRangedWea
 
 void ULyraGameplayAbility_RangedWeapon::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
+	UE_LOG(LogLyra, Display, TEXT("Activating ranged weapon ability."));
+
 	// Bind target data callback
 	UAbilitySystemComponent* MyAbilityComponent = CurrentActorInfo->AbilitySystemComponent.Get();
 	check(MyAbilityComponent);
@@ -458,6 +466,8 @@ void ULyraGameplayAbility_RangedWeapon::ActivateAbility(const FGameplayAbilitySp
 
 void ULyraGameplayAbility_RangedWeapon::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	UE_LOG(LogLyraAbilitySystem, Display, TEXT("Ending ranged weapon ability."));
+
 	if (IsEndAbilityValid(Handle, ActorInfo))
 	{
 		if (ScopeLockCount > 0)
@@ -482,9 +492,18 @@ void ULyraGameplayAbility_RangedWeapon::OnTargetDataReadyCallback(const FGamepla
 	UAbilitySystemComponent* MyAbilityComponent = CurrentActorInfo->AbilitySystemComponent.Get();
 	check(MyAbilityComponent);
 
-	if (const FGameplayAbilitySpec* AbilitySpec = MyAbilityComponent->FindAbilitySpecFromHandle(CurrentSpecHandle))
+	if (const FGameplayAbilitySpec* AbilitySpec = MyAbilityComponent->FindAbilitySpecFromHandle(CurrentSpecHandle))//AbilitySpec from handle access instanced and global ability info as well, what it is etc.
 	{
-		FScopedPredictionWindow	ScopedPrediction(MyAbilityComponent);
+		//retrieves the prediction window from component that is was bound to at the beginning of the ability in StartRangedWeaponTargeting()
+		//called when predictive code takes place and acts as a sync point between client and server, it is needed because we might have waited and the data/calculation
+		//on server might have already happened (accept/reject) and side effects produced might be no longer tied to the original key
+		//server will pick up that key and will use it within the same logical scope
+		//when SERVER hits this scope window point it will get the prediction key from MyAbilityComponent and will use it for all side effects withing this logical scope!
+		FScopedPredictionWindow	ScopedPrediction(MyAbilityComponent);//this one generates new SYNC POINT, we don't want to call OnTargetDataReady TWICE!
+		//once the server has finished the scope it will set the ReplicatedPredictionKey to this prediction key (might be regenerated) in component, and all the effects in this scope will share a key between client and server
+		//if the keys are the same, that means that the state is the same and no need to replicate the effects
+		//by association of the given delegate with a key and server response, the effects can be confirmed or rolled back.
+		UE_LOG(LogLyraAbilitySystem, Display, TEXT("On target data ready callback with ranged weapon and another scoped window - processing target data."));
 
 		// Take ownership of the target data to make sure no callbacks into game code invalidate it out from under us
 		FGameplayAbilityTargetDataHandle LocalTargetDataHandle(MoveTemp(const_cast<FGameplayAbilityTargetDataHandle&>(InData)));
@@ -499,7 +518,7 @@ void ULyraGameplayAbility_RangedWeapon::OnTargetDataReadyCallback(const FGamepla
 
 		bool bProjectileWeapon = false;
 
-#if WITH_SERVER_CODE
+#if WITH_SERVER_CODE//hidden from client
 		if (!bProjectileWeapon)
 		{
 			if (AController* Controller = GetControllerFromActorInfo())
@@ -521,7 +540,7 @@ void ULyraGameplayAbility_RangedWeapon::OnTargetDataReadyCallback(const FGamepla
 							}
 						}
 
-						WeaponStateComponent->ClientConfirmTargetData(LocalTargetDataHandle.UniqueId, bIsTargetDataValid, HitReplaces);
+						WeaponStateComponent->ClientConfirmTargetData(LocalTargetDataHandle.UniqueId, bIsTargetDataValid, HitReplaces);//will run only on client
 					}
 
 				}
@@ -539,6 +558,7 @@ void ULyraGameplayAbility_RangedWeapon::OnTargetDataReadyCallback(const FGamepla
 			WeaponData->AddSpread();
 
 			// Let the blueprint do stuff like apply effects to the targets
+			UE_LOG(LogLyraAbilitySystem, Display, TEXT("Before calling on ranged weapon target data ready implementation."));
 			OnRangedWeaponTargetDataReady(LocalTargetDataHandle);
 		}
 		else
@@ -552,8 +572,10 @@ void ULyraGameplayAbility_RangedWeapon::OnTargetDataReadyCallback(const FGamepla
 	MyAbilityComponent->ConsumeClientReplicatedTargetData(CurrentSpecHandle, CurrentActivationInfo.GetActivationPredictionKey());
 }
 
-void ULyraGameplayAbility_RangedWeapon::StartRangedWeaponTargeting()
+void ULyraGameplayAbility_RangedWeapon::StartRangedWeaponTargeting()//Is called from BP if it is locally controlled
 {
+	UE_LOG(LogLyraAbilitySystem, Display, TEXT("Start ranged weapon targeting."));
+
 	check(CurrentActorInfo);
 
 	AActor* AvatarActor = CurrentActorInfo->AvatarActor.Get();
@@ -566,6 +588,9 @@ void ULyraGameplayAbility_RangedWeapon::StartRangedWeaponTargeting()
 	check(Controller);
 	ULyraWeaponStateComponent* WeaponStateComponent = Controller->FindComponentByClass<ULyraWeaponStateComponent>();
 
+	//called on server when new prediction key is received from client, add true if the key was already replicated and we need retrieve data from cached
+	//valid prediction window in which calls doesn't need to be explicitly asked about
+	//pass activation key only if all the checks passed
 	FScopedPredictionWindow ScopedPrediction(MyAbilityComponent, CurrentActivationInfo.GetActivationPredictionKey());
 
 	TArray<FHitResult> FoundHits;
@@ -598,4 +623,5 @@ void ULyraGameplayAbility_RangedWeapon::StartRangedWeaponTargeting()
 
 	// Process the target data immediately
 	OnTargetDataReadyCallback(TargetData, FGameplayTag());
+	// Predictive window ends here?
 }
