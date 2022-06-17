@@ -1,8 +1,0 @@
-{
-	"BuildId": "19505902",
-	"Modules": 
-	{
-		"LyraEditor": "UnrealEditor-LyraEditor.dll",
-		"LyraGame": "UnrealEditor-LyraGame.dll"
-	}
-}
