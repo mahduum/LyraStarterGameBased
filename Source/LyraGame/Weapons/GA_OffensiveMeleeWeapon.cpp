@@ -2,8 +2,6 @@
 
 
 #include "Weapons/GA_OffensiveMeleeWeapon.h"
-
-#include "LyraGameplayAbility_RangedWeapon.h"
 #include "Weapons/LyraRangedWeaponInstance.h"
 #include "LyraLogChannels.h"
 #include "AIController.h"
@@ -11,8 +9,8 @@
 #include "NativeGameplayTags.h"
 #include "AbilitySystemComponent.h"
 #include "LyraWeaponStateComponent.h"
-#include "../../../Plugins/Developer/RiderLink/Source/RD/thirdparty/spdlog/include/spdlog/fmt/bundled/chrono.h"
 #include "AbilitySystem/LyraGameplayAbilityTargetData_SingleTargetHit.h"
+#include "Physics/LyraCollisionChannels.h"
 
 
 //TODO
@@ -174,7 +172,7 @@ void UGA_OffensiveMeleeWeapon::OnTargetDataReadyCallback(const FGameplayAbilityT
 			//WeaponData->AddSpread();
 
 			// Let the blueprint do stuff like apply effects to the targets
-			OnRangedWeaponTargetDataReady(LocalTargetDataHandle);
+			OnOffensiveMeleeWeaponTargetDataReady(LocalTargetDataHandle);
 		}
 		else
 		{
@@ -188,7 +186,7 @@ void UGA_OffensiveMeleeWeapon::OnTargetDataReadyCallback(const FGameplayAbilityT
 }
 
 //TODO redo for melee with dash and teleport
-void UGA_OffensiveMeleeWeapon::StartRangedWeaponTargeting()
+void UGA_OffensiveMeleeWeapon::StartMeleeWeaponTargeting()
 {
 	check(CurrentActorInfo);//actor who owns this ability
 
@@ -246,83 +244,82 @@ void UGA_OffensiveMeleeWeapon::PerformLocalTargeting(OUT TArray<FHitResult>& Out
 	if (AvatarPawn && AvatarPawn->IsLocallyControlled() && WeaponData)
 	{
 		FOffensiveMeleeWeaponAttackInput InputData;
-		// InputData.WeaponData = WeaponData;
-		// InputData.bCanPlayBulletFX = (AvatarPawn->GetNetMode() != NM_DedicatedServer);
+		InputData.WeaponData = WeaponData;
+		InputData.bCanPlaySlashFX = (AvatarPawn->GetNetMode() != NM_DedicatedServer);
 		//
 		// //@TODO: Should do more complicated logic here when the player is close to a wall, etc...
-		// const FTransform TargetTransform = GetTargetingTransform(AvatarPawn, ELyraAbilityTargetingSource::CameraTowardsFocus);
+		// const FTransform TargetTransform = GetTargetingTransform(AvatarPawn, ELyraAbilityTargetingSource::CameraTowardsFocus);//where from are we targeting
 		// InputData.AimDir = TargetTransform.GetUnitAxis(EAxis::X);
 		// InputData.StartTrace = TargetTransform.GetTranslation();
 		//
 		// InputData.EndAim = InputData.StartTrace + InputData.AimDir * WeaponData->GetMaxDamageRange();
-//
-// #if ENABLE_DRAW_DEBUG
+		InputData.StartTrace = AvatarPawn->GetActorTransform().GetLocation();//todo try to get transform of a skeleton socket
+		InputData.SphereRadius = CurrentActorInfo->OwnerActor->GetSimpleCollisionRadius();
+#if ENABLE_DRAW_DEBUG
 // 		if (LyraConsoleVariables::DrawBulletTracesDuration > 0.0f)
 // 		{
 // 			static float DebugThickness = 2.0f;
 // 			DrawDebugLine(GetWorld(), InputData.StartTrace, InputData.StartTrace + (InputData.AimDir * 100.0f), FColor::Yellow, false, LyraConsoleVariables::DrawBulletTracesDuration, 0, DebugThickness);
 // 		}
-// #endif
-		TraceSlashArcOrThrustPoint(InputData, /*out*/ OutHits);
+#endif
+		TraceSlashArcOrThrustPoint(InputData, /*out*/ OutHits);//out hits could be given from actual movement?
 	}
 }
 
 //TODO change this to be tracing slashes before they are dealed or when they are being dealed
 void UGA_OffensiveMeleeWeapon::TraceSlashArcOrThrustPoint(const FOffensiveMeleeWeaponAttackInput& InputData, OUT TArray<FHitResult>& OutHits)
 {
-	ULyraRangedWeaponInstance* WeaponData = InputData.WeaponData;
+	UOffensiveMeleeWeaponInstance* WeaponData = InputData.WeaponData;
 	check(WeaponData);
+	//arc will be more less the sphere of radius arm length plus blade length, and then we "only" need to cut away hit points that are outside a specific angle
+	//or get the animation and sample the positions from all the frames of the animation
+	//use sphere for now for simplicity
 
-	const int32 BulletsPerCartridge = WeaponData->GetBulletsPerCartridge();
+	//const float BaseSpreadAngle = WeaponData->
+	//const float SpreadAngleMultiplier = WeaponData->();
+	//const float ActualSpreadAngle = BaseSpreadAngle * SpreadAngleMultiplier;
 
-	for (int32 BulletIndex = 0; BulletIndex < BulletsPerCartridge; ++BulletIndex)
+	//const float HalfSpreadAngleInRadians = FMath::DegreesToRadians(ActualSpreadAngle * 0.5f);
+
+	//todo more complex logic for circle slice later
+	const FVector SlashArc;//todo calculate slash arc = VRandConeNormalDistribution(InputData.AimDir, HalfSpreadAngleInRadians, WeaponData->GetSpreadExponent());
+
+	const FVector EndTrace = InputData.StartTrace + SlashArc;//todo calculate slash arc * WeaponData->GetMaxDamageRange());
+	FVector HitLocation = EndTrace;
+
+	TArray<FHitResult> AllImpacts;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(GetOwningActorFromActorInfo());
+	//bool bHit = UKismetSystemLibrary::SphereTraceMulti(GetOwningActorFromActorInfo(), InputData.StartTrace, InputData.StartTrace, InputData.SphereRadius, ETraceTypeQuery::TraceTypeQuery1, true, ActorsToIgnore, EDrawDebugTrace::Type::ForOneFrame,  AllImpacts, true);//DoSingleBulletTrace(InputData.StartTrace, EndTrace, WeaponData->GetBulletTraceSweepRadius(), /*bIsSimulated=*/ false, /*out*/ AllImpacts);
+	if (auto Impact = GetWorld()->SweepMultiByChannel(AllImpacts, InputData.StartTrace, InputData.StartTrace, FQuat::Identity, Lyra_TraceChannel_Weapon, FCollisionShape::MakeSphere(InputData.SphereRadius), FCollisionQueryParams::DefaultQueryParam, FCollisionResponseParams::DefaultResponseParam))
 	{
-		const float BaseSpreadAngle = WeaponData->GetCalculatedSpreadAngle();
-		const float SpreadAngleMultiplier = WeaponData->GetCalculatedSpreadAngleMultiplier();
-		const float ActualSpreadAngle = BaseSpreadAngle * SpreadAngleMultiplier;
+		UE_LOG(LogLyraAbilitySystem, Display, TEXT("Some object were hit by sphere multi sweep"));
+#if ENABLE_DRAW_DEBUG
 
-		const float HalfSpreadAngleInRadians = FMath::DegreesToRadians(ActualSpreadAngle * 0.5f);
+		DrawDebugPoint(GetWorld(), AllImpacts.Last().Location, 5., FColor::Red, false, 3.);
 
-		const FVector SlashArc;//todo calculate slash arc = VRandConeNormalDistribution(InputData.AimDir, HalfSpreadAngleInRadians, WeaponData->GetSpreadExponent());
+#endif
 
-		const FVector EndTrace = InputData.StartTrace + SlashArc;//todo calculate slash arc * WeaponData->GetMaxDamageRange());
-		FVector HitLocation = EndTrace;
-
-		TArray<FHitResult> AllImpacts;
-
-		FHitResult Impact;// = //todo slash sweep;DoSingleBulletTrace(InputData.StartTrace, EndTrace, WeaponData->GetBulletTraceSweepRadius(), /*bIsSimulated=*/ false, /*out*/ AllImpacts);
-
-		const AActor* HitActor = Impact.GetActor();
-
-		if (HitActor)
+		if (AllImpacts.Num() > 0)
 		{
-// #if ENABLE_DRAW_DEBUG
-// 			if (LyraConsoleVariables::DrawBulletHitDuration > 0.0f)
-// 			{
-// 				DrawDebugPoint(GetWorld(), Impact.ImpactPoint, LyraConsoleVariables::DrawBulletHitRadius, FColor::Red, false, LyraConsoleVariables::DrawBulletHitRadius);
-// 			}
-// #endif
-
-			if (AllImpacts.Num() > 0)
-			{
-				OutHits.Append(AllImpacts);
-			}
-
-			HitLocation = Impact.ImpactPoint;
+			OutHits.Append(AllImpacts);
 		}
 
-		// Make sure there's always an entry in OutHits so the direction can be used for tracers, etc...
-		if (OutHits.Num() == 0)
-		{
-			if (!Impact.bBlockingHit)
-			{
-				// Locate the fake 'impact' at the end of the trace
-				Impact.Location = EndTrace;
-				Impact.ImpactPoint = EndTrace;
-			}
+		HitLocation = AllImpacts[0].ImpactPoint;
 
-			OutHits.Add(Impact);
-		}
+	}
+
+	// Make sure there's always an entry in OutHits so the direction can be used for tracers, etc...
+	if (OutHits.Num() == 0)
+	{
+		// if (!Impact.bBlockingHit)
+		// {
+		// 	// Locate the fake 'impact' at the end of the trace
+		// 	Impact.Location = EndTrace;
+		// 	Impact.ImpactPoint = EndTrace;
+		// }
+		//
+		// OutHits.Add(Impact);
 	}
 }
 

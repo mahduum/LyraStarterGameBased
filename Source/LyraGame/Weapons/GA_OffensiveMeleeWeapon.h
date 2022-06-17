@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "LyraGameplayAbility_RangedWeapon.h"
 #include "OffensiveMeleeWeaponInstance.h"
 #include "Equipment/LyraGameplayAbility_FromEquipment.h"
 #include "GA_OffensiveMeleeWeapon.generated.h"
@@ -34,15 +33,18 @@ protected:
 		FVector AimDir;
 
 		// The weapon instance / source of weapon data
-		ULyraRangedWeaponInstance* WeaponData = nullptr;
+		UOffensiveMeleeWeaponInstance* WeaponData = nullptr;
 
 		// Can we play bullet FX for hits during this trace
-		bool bCanPlayBulletFX = false;
+		bool bCanPlaySlashFX = false;
+
+		float SphereRadius;
 
 		FOffensiveMeleeWeaponAttackInput()
 			: StartTrace(ForceInitToZero)
 			  , EndAim(ForceInitToZero)
 			  , AimDir(ForceInitToZero)
+				, SphereRadius(ForceInitToZero)
 		{
 		}
 	};
@@ -74,11 +76,11 @@ public:
 	void OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHandle& InData, FGameplayTag ApplicationTag);
 
 	UFUNCTION(BlueprintCallable)
-	void StartRangedWeaponTargeting();
+	void StartMeleeWeaponTargeting();
 
 	// Called when target data is ready
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnRangedWeaponTargetDataReady(const FGameplayAbilityTargetDataHandle& TargetData);
+	void OnOffensiveMeleeWeaponTargetDataReady(const FGameplayAbilityTargetDataHandle& TargetData);
 
 private:
 	FDelegateHandle OnTargetDataReadyCallbackDelegateHandle;

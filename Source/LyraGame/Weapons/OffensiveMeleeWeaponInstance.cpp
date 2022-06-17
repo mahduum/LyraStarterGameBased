@@ -9,6 +9,7 @@ UOffensiveMeleeWeaponInstance::UOffensiveMeleeWeaponInstance(const FObjectInitia
 	: Super(ObjectInitializer)
 {
 	ConsecutiveHitCountToDamagePerHitMultiplierCurve.EditorCurveData.AddKey(0.0f, 1.0f);
+	//todo set blade lenght for overlap calculations
 }
 
 void UOffensiveMeleeWeaponInstance::PostLoad()
@@ -29,6 +30,7 @@ void UOffensiveMeleeWeaponInstance::PostEditChangeProperty(struct FPropertyChang
 
 void UOffensiveMeleeWeaponInstance::UpdateDebugVisualization()
 {
+	// todo debug blade cutting zone 
 	// ComputeHeatRange(/*out*/ Debug_MinHeat, /*out*/ Debug_MaxHeat);
 	// ComputeSpreadRange(/*out*/ Debug_MinSpreadAngle, /*out*/ Debug_MaxSpreadAngle);
 	// Debug_CurrentHeat = CurrentHeat;

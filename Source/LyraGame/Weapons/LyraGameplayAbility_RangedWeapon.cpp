@@ -86,7 +86,7 @@ ULyraRangedWeaponInstance* ULyraGameplayAbility_RangedWeapon::GetWeaponInstance(
 
 bool ULyraGameplayAbility_RangedWeapon::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	UE_LOG(LogLyra, Display, TEXT("Can activate ranged weapon ability?"));
+	UE_LOG(LogLyraAbilitySystem, Display, TEXT("Can activate ranged weapon ability?"));
 
 	bool bResult = Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 
@@ -107,6 +107,8 @@ bool ULyraGameplayAbility_RangedWeapon::CanActivateAbility(const FGameplayAbilit
 
 int32 ULyraGameplayAbility_RangedWeapon::FindFirstPawnHitResult(const TArray<FHitResult>& HitResults)
 {
+	UE_LOG(LogLyraAbilitySystem, Display, TEXT("Find first pawn hit result hit results count: %d"), HitResults.Num());
+	
 	for (int32 Idx = 0; Idx < HitResults.Num(); ++Idx)
 	{
 		const FHitResult& CurHitResult = HitResults[Idx];
@@ -258,8 +260,8 @@ FTransform ULyraGameplayAbility_RangedWeapon::GetTargetingTransform(APawn* Sourc
 		if (PC)
 		{
 			const FVector WeaponLoc = GetWeaponTargetingSourceLocation();
-			CamLoc = FocalLoc + (((WeaponLoc - FocalLoc) | AimDir) * AimDir);
-			FocalLoc = CamLoc + (AimDir * FocalDistance);
+			CamLoc = FocalLoc + (((WeaponLoc - FocalLoc) | AimDir) * AimDir);//if aim dir is normalized dot will get the lenght of the projection of the longer vector, so we know in this case how to place the camera with respect to focal location
+			FocalLoc = CamLoc + (AimDir * FocalDistance);//and then to adjust focal location accordingly
 		}
 		//Move the start to be the HeadPosition of the AI
 		else if (AAIController* AIController = Cast<AAIController>(Controller))
@@ -310,6 +312,7 @@ FHitResult ULyraGameplayAbility_RangedWeapon::DoSingleBulletTrace(const FVector&
 	// First trace without using sweep radius
 	if (FindFirstPawnHitResult(OutHits) == INDEX_NONE)
 	{
+		
 		Impact = WeaponTrace(StartTrace, EndTrace, /*SweepRadius=*/ 0.0f, bIsSimulated, /*out*/ OutHits);
 	}
 
